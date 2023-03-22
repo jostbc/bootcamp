@@ -3,6 +3,8 @@ package com.nttdata.bootcamp.delegate;
 import com.nttdata.bootcamp.api.AccountApiDelegate;
 import com.nttdata.bootcamp.model.AccountRequestDto;
 import com.nttdata.bootcamp.model.AccountResponseDto;
+import com.nttdata.bootcamp.model.AccountWithdrawRequestDto;
+import com.nttdata.bootcamp.model.AccountWithdrawResponseDto;
 import org.springframework.http.ResponseEntity;
 
 public class AccountDelegateImpl implements AccountApiDelegate {
@@ -14,11 +16,6 @@ public class AccountDelegateImpl implements AccountApiDelegate {
     @Override
     public ResponseEntity<AccountResponseDto> createAccountPerson(AccountRequestDto accountRequestDto) {
         return AccountApiDelegate.super.createAccountPerson(accountRequestDto);
-    }
-
-    @Override
-    public ResponseEntity<AccountResponseDto> depositAccount(AccountRequestDto accountRequestDto) {
-        return AccountApiDelegate.super.depositAccount(accountRequestDto);
     }
 
     @Override
@@ -42,7 +39,7 @@ public class AccountDelegateImpl implements AccountApiDelegate {
     }
 
     @Override
-    public ResponseEntity<AccountResponseDto> withdrawAccount(AccountRequestDto accountRequestDto) {
-        return AccountApiDelegate.super.withdrawAccount(accountRequestDto);
+    public ResponseEntity<AccountWithdrawResponseDto> withdrawAccount(AccountWithdrawRequestDto accountWithdrawRequestDto) {
+        return AccountApiDelegate.super.withdrawAccount(accountWithdrawRequestDto);
     }
 }

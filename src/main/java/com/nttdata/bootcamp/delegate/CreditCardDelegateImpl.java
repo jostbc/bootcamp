@@ -1,29 +1,36 @@
 package com.nttdata.bootcamp.delegate;
 
 import com.nttdata.bootcamp.api.CreditCardApiDelegate;
+import com.nttdata.bootcamp.model.CreditCardConsumeRequestDto;
+import com.nttdata.bootcamp.model.CreditCardConsumeResponseDto;
+import com.nttdata.bootcamp.model.CreditCardPayRequestDto;
+import com.nttdata.bootcamp.model.CreditCardPayResponseDto;
 import com.nttdata.bootcamp.model.CreditCardRequestDto;
 import com.nttdata.bootcamp.model.CreditCardResponseDto;
+import com.nttdata.bootcamp.service.CreditCardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CreditCardDelegateImpl implements CreditCardApiDelegate {
-    @Override
-    public ResponseEntity<CreditCardResponseDto> consumeCreditCard(CreditCardRequestDto creditCardRequestDto) {
-        return CreditCardApiDelegate.super.consumeCreditCard(creditCardRequestDto);
-    }
+
+    @Autowired
+    CreditCardService creditCardService;
 
     @Override
     public ResponseEntity<CreditCardResponseDto> createCreditCardCompany(CreditCardRequestDto creditCardRequestDto) {
-        return CreditCardApiDelegate.super.createCreditCardCompany(creditCardRequestDto);
+        return ResponseEntity.ok(creditCardService.createCreditCard(creditCardRequestDto).blockingGet());
     }
 
     @Override
     public ResponseEntity<CreditCardResponseDto> createCreditCardPerson(CreditCardRequestDto creditCardRequestDto) {
-        return CreditCardApiDelegate.super.createCreditCardPerson(creditCardRequestDto);
+        return ResponseEntity.ok(creditCardService.createCreditCard(creditCardRequestDto).blockingGet());
     }
 
     @Override
     public ResponseEntity<CreditCardResponseDto> findAllCreditCard() {
-        return CreditCardApiDelegate.super.findAllCreditCard();
+        return ResponseEntity.ok(creditCardService.getAll().blockingFirst());
     }
 
     @Override
@@ -33,16 +40,21 @@ public class CreditCardDelegateImpl implements CreditCardApiDelegate {
 
     @Override
     public ResponseEntity<CreditCardResponseDto> findCreditCardById(String creditCardId) {
-        return CreditCardApiDelegate.super.findCreditCardById(creditCardId);
-    }
-
-    @Override
-    public ResponseEntity<CreditCardResponseDto> payCreditCard(CreditCardRequestDto creditCardRequestDto) {
-        return CreditCardApiDelegate.super.payCreditCard(creditCardRequestDto);
+        return ResponseEntity.ok(creditCardService.getCreditCardById(creditCardId).blockingGet());
     }
 
     @Override
     public ResponseEntity<CreditCardResponseDto> updateCreditCard(CreditCardRequestDto creditCardRequestDto) {
-        return CreditCardApiDelegate.super.updateCreditCard(creditCardRequestDto);
+        return ResponseEntity.ok(creditCardService.updateCreditCard(creditCardRequestDto).blockingGet());
+    }
+
+    @Override
+    public ResponseEntity<CreditCardConsumeResponseDto> consumeCreditCard(CreditCardConsumeRequestDto creditCardConsumeRequestDto) {
+        return ResponseEntity.ok(creditCardService.consumeCreditCard(creditCardConsumeRequestDto).blockingGet());
+    }
+
+    @Override
+    public ResponseEntity<CreditCardPayResponseDto> payCreditCard(CreditCardPayRequestDto creditCardPayRequestDto) {
+        return ResponseEntity.ok(creditCardService.payCreditCard(creditCardPayRequestDto).blockingGet());
     }
 }

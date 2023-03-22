@@ -2,6 +2,13 @@ package com.nttdata.bootcamp.util;
 
 import com.nttdata.bootcamp.model.Company;
 import com.nttdata.bootcamp.model.CompanyResponseDto;
+import com.nttdata.bootcamp.model.Credit;
+import com.nttdata.bootcamp.model.CreditCard;
+import com.nttdata.bootcamp.model.CreditCardConsumeResponseDto;
+import com.nttdata.bootcamp.model.CreditCardPayResponseDto;
+import com.nttdata.bootcamp.model.CreditCardResponseDto;
+import com.nttdata.bootcamp.model.CreditPayResponseDto;
+import com.nttdata.bootcamp.model.CreditResponseDto;
 import com.nttdata.bootcamp.model.MessageStatus;
 import com.nttdata.bootcamp.model.Person;
 import com.nttdata.bootcamp.model.PersonResponseDto;
@@ -65,4 +72,89 @@ public class Util {
         }
         return transactionResponseDto;
     }
+
+    public static CreditCardResponseDto creditCardToResponse(List<CreditCard> creditCard){
+        CreditCardResponseDto creditCardResponseDto = new CreditCardResponseDto();
+        MessageStatus msg = new MessageStatus();
+        if (creditCard.size()>0){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+            creditCardResponseDto.setStatusDto(msg);
+            creditCardResponseDto.setCreditCard(creditCard);
+        }
+        else{
+            msg.setStatusCode("1");
+            msg.setMessage("No existen tarjetas de credito.");
+            creditCardResponseDto.setStatusDto(msg);
+            creditCardResponseDto.setCreditCard(creditCard);
+        }
+        return creditCardResponseDto;
+    }
+
+    public static CreditResponseDto creditToResponse(List<Credit> credit){
+        CreditResponseDto creditResponseDto = new CreditResponseDto();
+        MessageStatus msg = new MessageStatus();
+        if (credit.size()>0){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+            creditResponseDto.setStatusDto(msg);
+            creditResponseDto.setCredit(credit);
+        }
+        else{
+            msg.setStatusCode("1");
+            msg.setMessage("No existen creditos.");
+            creditResponseDto.setStatusDto(msg);
+            creditResponseDto.setCredit(credit);
+        }
+        return creditResponseDto;
+    }
+
+    public static CreditPayResponseDto creditPayToResponse(List<Credit> credit){
+        CreditPayResponseDto creditPayResponseDto = new CreditPayResponseDto();
+        MessageStatus msg = new MessageStatus();
+        if (credit.size()>0){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+            creditPayResponseDto.setStatusDto(msg);
+        }
+        else{
+            msg.setStatusCode("1");
+            msg.setMessage("No existen creditos.");
+            creditPayResponseDto.setStatusDto(msg);
+        }
+        return creditPayResponseDto;
+    }
+
+    public static CreditCardPayResponseDto creditCardPayToResponse(List<CreditCard> creditCard){
+        CreditCardPayResponseDto creditCardPayResponseDto = new CreditCardPayResponseDto();
+        MessageStatus msg = new MessageStatus();
+        if (creditCard.size()>0){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+            creditCardPayResponseDto.setStatusDto(msg);
+        }
+        else{
+            msg.setStatusCode("1");
+            msg.setMessage("No existen creditos.");
+            creditCardPayResponseDto.setStatusDto(msg);
+        }
+        return creditCardPayResponseDto;
+    }
+
+    public static CreditCardConsumeResponseDto creditCardConsumeToResponse(List<CreditCard> creditCard){
+        CreditCardConsumeResponseDto creditCardPayResponseDto = new CreditCardConsumeResponseDto();
+        MessageStatus msg = new MessageStatus();
+        if (creditCard.size()>0){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+            creditCardPayResponseDto.setStatusDto(msg);
+        }
+        else{
+            msg.setStatusCode("1");
+            msg.setMessage("No existen creditos.");
+            creditCardPayResponseDto.setStatusDto(msg);
+        }
+        return creditCardPayResponseDto;
+    }
+
 }
