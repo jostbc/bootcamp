@@ -97,6 +97,11 @@ public class CreditCardServiceImpl implements CreditCardService {
 				.toMaybe();
 	}
 
+	/**
+	 * Paga el saldo de una tarjeta de credito dentro del repositorio segun los datos enviados en el body.
+	 * @param creditCardPayRequestDto
+	 * @return
+	 */
 	@Override
 	public Maybe<CreditCardPayResponseDto> payCreditCard(CreditCardPayRequestDto creditCardPayRequestDto) {
 		return Maybe.just(creditCardRepository.findByCreditCardId(creditCardPayRequestDto.getId()))
@@ -121,6 +126,11 @@ public class CreditCardServiceImpl implements CreditCardService {
 				.toMaybe();
 	}
 
+	/**
+	 * Consume saldo de una tarjeta de credito dentro del repositorio segun los datos enviados en el body.
+	 * @param creditCardConsumeRequestDto
+	 * @return
+	 */
 	@Override
 	public Maybe<CreditCardConsumeResponseDto> consumeCreditCard(CreditCardConsumeRequestDto creditCardConsumeRequestDto) {
 		return Maybe.just(creditCardRepository.findByCreditCardId(creditCardConsumeRequestDto.getId()))

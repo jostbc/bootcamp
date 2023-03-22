@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Clase Repositorio para los métodos de acceso a la base de datos de los cliente empresariales
+ */
 @Repository
 public interface CompanyRepository extends MongoRepository<Company, String> {
     @Query("{'id':?0}")

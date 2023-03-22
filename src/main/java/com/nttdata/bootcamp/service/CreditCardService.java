@@ -9,6 +9,9 @@ import com.nttdata.bootcamp.model.CreditCardResponseDto;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 
+/**
+ * Clase interfaz de servicio para las tajetas de credito
+ */
 public interface CreditCardService {
 
 	Flowable<CreditCardResponseDto> getAll();

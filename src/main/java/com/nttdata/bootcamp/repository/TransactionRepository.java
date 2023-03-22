@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Clase Repositorio para los métodos de acceso a la base de datos de las transacciones
+ */
 @Repository
 public interface TransactionRepository extends MongoRepository<Transaction, String> {
     @Query("{'id':?0}")

@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Clase Repositorio para los métodos de acceso a la base de datos de los clientes personales
+ */
 @Repository
 public interface PersonRepository extends MongoRepository<Person, String> {
     @Query("{'id':?0}")

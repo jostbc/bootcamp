@@ -7,6 +7,9 @@ import com.nttdata.bootcamp.model.CreditResponseDto;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 
+/**
+ * Clase interfaz de servicio para los creditos
+ */
 public interface CreditService {
 
     Flowable<CreditResponseDto> getAll();

@@ -9,6 +9,9 @@ import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 
+/**
+ * Clase de configuracion para el acceso a la base de datos MongoDB
+ */
 @Configuration
 public class MongoConfiguration extends AbstractMongoClientConfiguration {
 

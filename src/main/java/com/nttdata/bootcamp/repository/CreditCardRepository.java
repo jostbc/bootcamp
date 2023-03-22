@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Clase Repositorio para los métodos de acceso a la base de datos de las tarjetas de credito
+ */
 @Repository
 public interface CreditCardRepository extends MongoRepository<CreditCard, String> {
     @Query("{'id':?0}")

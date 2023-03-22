@@ -120,6 +120,11 @@ public class AccountServiceImpl implements AccountService {
 				.toMaybe();
 	}
 
+	/**
+	 * Deposita en una cuenta dentro del repositorio segun los datos enviados en el body.
+	 * @param accountDepositRequestDto
+	 * @return
+	 */
 	@Override
 	public Maybe<AccountDepositResponseDto> depositAccount(AccountDepositRequestDto accountDepositRequestDto) {
 		return Maybe.just(accountRepository.findByAccountId(accountDepositRequestDto.getId()))
@@ -143,6 +148,11 @@ public class AccountServiceImpl implements AccountService {
 				.toMaybe();
 	}
 
+	/**
+	 * Retira en una cuenta dentro del repositorio segun los datos enviados en el body.
+	 * @param accountWithdrawRequestDto
+	 * @return
+	 */
 	@Override
 	public Maybe<AccountWithdrawResponseDto> withdrawAccount(AccountWithdrawRequestDto accountWithdrawRequestDto) {
 		return Maybe.just(accountRepository.findByAccountId(accountWithdrawRequestDto.getId()))

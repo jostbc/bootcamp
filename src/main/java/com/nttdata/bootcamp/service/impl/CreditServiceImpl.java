@@ -95,6 +95,11 @@ public class CreditServiceImpl implements CreditService {
                 .toMaybe();
     }
 
+    /**
+     * Paga el saldo de un credito dentro del repositorio segun los datos enviados en el body.
+     * @param creditPayRequestDto
+     * @return
+     */
     @Override
     public Maybe<CreditPayResponseDto> payCredit(CreditPayRequestDto creditPayRequestDto) {
         return Maybe.just(creditRepository.findByCreditId(creditPayRequestDto.getId()))
