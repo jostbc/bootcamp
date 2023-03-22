@@ -764,6 +764,7 @@ components:
         - lastName
         - name
         - telephone
+        - profile
       type: object
       properties:
         id:
@@ -784,6 +785,9 @@ components:
         telephone:
           type: string
           example: "945856325"
+        profile:
+          type: string
+          example: ESTANDAR
     PersonResponseDto:
       required:
         - id
@@ -848,6 +852,9 @@ components:
         telephone:
           type: string
           example: "259864"
+        profile:
+          type: string
+          example: ESTANDAR
         holders:
           type: array
           items:

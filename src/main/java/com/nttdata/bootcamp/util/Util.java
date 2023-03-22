@@ -171,15 +171,17 @@ public class Util {
             msg.setMessage("Operación exitosa.");
             accountResponseDto.setAccount(account);
         }
-        switch (account.get(0).getStatus()) {
-            case 3:
-                msg.setStatusCode("3");
-                msg.setMessage("Cliente ya tiene ese tipo de cuenta.");
-                break;
-            case 4:
-                msg.setStatusCode("4");
-                msg.setMessage("No existe el cliente.");
-                break;
+        if(account.size()>0){
+            switch (account.get(0).getStatus()) {
+                case 3:
+                    msg.setStatusCode("3");
+                    msg.setMessage("Cliente ya tiene ese tipo de cuenta.");
+                    break;
+                case 4:
+                    msg.setStatusCode("4");
+                    msg.setMessage("No existe el cliente.");
+                    break;
+            }
         }
         accountResponseDto.setStatusDto(msg);
         return accountResponseDto;

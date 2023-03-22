@@ -55,6 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
 		company.setRuc(companyRequestDto.getRuc());
 		company.setEmail(companyRequestDto.getEmail());
 		company.setTelephone(companyRequestDto.getTelephone());
+		company.setProfile("ESTANDAR");
 		company.setHolders(companyRequestDto.getHolders());
 		company.setSignatories(companyRequestDto.getSignatories());
 		return Flowable.just(companyRepository.save(company))
@@ -76,6 +77,7 @@ public class CompanyServiceImpl implements CompanyService {
 		company.setRuc(companyRequestDto.getRuc());
 		company.setEmail(companyRequestDto.getEmail());
 		company.setTelephone(companyRequestDto.getTelephone());
+		company.setProfile(companyRepository.findByCompanyId(companyRequestDto.getId()).get(0).getProfile());
 		company.setHolders(companyRequestDto.getHolders());
 		company.setSignatories(companyRequestDto.getSignatories());
 		return Flowable.just(companyRepository.save(company))

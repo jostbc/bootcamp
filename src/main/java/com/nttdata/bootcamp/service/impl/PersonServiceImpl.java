@@ -4,6 +4,7 @@ import com.nttdata.bootcamp.model.Person;
 import com.nttdata.bootcamp.model.PersonRequestDto;
 import com.nttdata.bootcamp.model.PersonResponseDto;
 import com.nttdata.bootcamp.repository.PersonRepository;
+import com.nttdata.bootcamp.service.AccountService;
 import com.nttdata.bootcamp.service.PersonService;
 import com.nttdata.bootcamp.util.Util;
 import io.reactivex.rxjava3.core.Flowable;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
+
+    private final AccountService accountService;
 
     /**
      * Método que devuelve todos los clientes de tipo personal dentro el repositorio.
@@ -55,6 +58,7 @@ public class PersonServiceImpl implements PersonService {
         person.setDni(personRequestDto.getDni());
         person.setEmail(personRequestDto.getEmail());
         person.setTelephone(personRequestDto.getTelephone());
+        person.setProfile("ESTANDAR");
         return Flowable.just(personRepository.save(person))
                 .collect(Collectors.toList())
                 .map(Util::personToResponse)
@@ -75,6 +79,7 @@ public class PersonServiceImpl implements PersonService {
         person.setDni(personRequestDto.getDni());
         person.setEmail(personRequestDto.getEmail());
         person.setTelephone(personRequestDto.getTelephone());
+        person.setProfile(personRepository.findByPersonId(personRequestDto.getId()).get(0).getProfile());
         return Flowable.just(personRepository.save(person))
                 .collect(Collectors.toList())
                 .map(Util::personToResponse)
