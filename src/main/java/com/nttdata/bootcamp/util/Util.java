@@ -1,5 +1,9 @@
 package com.nttdata.bootcamp.util;
 
+import com.nttdata.bootcamp.model.Account;
+import com.nttdata.bootcamp.model.AccountDepositResponseDto;
+import com.nttdata.bootcamp.model.AccountResponseDto;
+import com.nttdata.bootcamp.model.AccountWithdrawResponseDto;
 import com.nttdata.bootcamp.model.Company;
 import com.nttdata.bootcamp.model.CompanyResponseDto;
 import com.nttdata.bootcamp.model.Credit;
@@ -155,6 +159,56 @@ public class Util {
             creditCardPayResponseDto.setStatusDto(msg);
         }
         return creditCardPayResponseDto;
+    }
+    public static AccountResponseDto accountToResponse(List<Account> account){
+        AccountResponseDto accountResponseDto = new AccountResponseDto();
+        MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen cuentas.");
+        accountResponseDto.setAccount(null);
+        if (account.size()>0 && !account.get(0).getId().equals("0")){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+            accountResponseDto.setAccount(account);
+        }
+        switch (account.get(0).getStatus()) {
+            case 3:
+                msg.setStatusCode("3");
+                msg.setMessage("Cliente ya tiene ese tipo de cuenta.");
+                break;
+            case 4:
+                msg.setStatusCode("4");
+                msg.setMessage("No existe el cliente.");
+                break;
+        }
+        accountResponseDto.setStatusDto(msg);
+        return accountResponseDto;
+    }
+
+    public static AccountDepositResponseDto accountDepositToResponse(List<Account> account){
+        AccountDepositResponseDto accountDepositResponseDto = new AccountDepositResponseDto();
+        MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen cuentas.");
+        if (account.size()>0){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+        }
+        accountDepositResponseDto.setStatusDto(msg);
+        return accountDepositResponseDto;
+    }
+
+    public static AccountWithdrawResponseDto accountWithdrawToResponse(List<Account> account){
+        AccountWithdrawResponseDto accountWithdrawResponseDto = new AccountWithdrawResponseDto();
+        MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen cuentas.");
+        if (account.size()>0){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+        }
+        accountWithdrawResponseDto.setStatusDto(msg);
+        return accountWithdrawResponseDto;
     }
 
 }

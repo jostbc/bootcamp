@@ -670,6 +670,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountResponseDto'
+  /account/typeAccount/{typeAccount}:
+    get:
+      tags:
+        - Account
+      summary: Find Account by type account
+      description: Find Account by type account
+      operationId: findAccountByTypeAccount
+      parameters:
+        - in: path
+          name: typeAccount
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseDto'
   /account/customer/{customerId}:
     get:
       tags:
