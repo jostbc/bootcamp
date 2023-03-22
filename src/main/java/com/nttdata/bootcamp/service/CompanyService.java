@@ -2,17 +2,20 @@ package com.nttdata.bootcamp.service;
 
 import com.nttdata.bootcamp.model.CompanyRequestDto;
 import com.nttdata.bootcamp.model.CompanyResponseDto;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Maybe;
+
 /**
  * Clase interfaz de servicio para las clientes empresariales
  */
 public interface CompanyService {
 
-	CompanyResponseDto getAll();
+	Flowable<CompanyResponseDto> getAll();
 
-	CompanyResponseDto getCompanyById(String companyId);
+	Maybe<CompanyResponseDto> getCompanyById(String companyId);
 
-	CompanyResponseDto createCompany(CompanyRequestDto companyRequestDto);
+	Maybe<CompanyResponseDto> createCompany(CompanyRequestDto companyRequestDto);
 
-	CompanyResponseDto updateCompany(CompanyRequestDto companyRequestDto);
+	Maybe<CompanyResponseDto> updateCompany(CompanyRequestDto companyRequestDto);
 
 }

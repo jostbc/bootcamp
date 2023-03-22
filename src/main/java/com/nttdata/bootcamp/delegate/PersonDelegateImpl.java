@@ -7,8 +7,6 @@ import com.nttdata.bootcamp.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.NativeWebRequest;
-import java.util.Optional;
 
 @Service
 public class PersonDelegateImpl implements PersonApiDelegate {
@@ -18,21 +16,21 @@ public class PersonDelegateImpl implements PersonApiDelegate {
 
     @Override
     public ResponseEntity<PersonResponseDto> createPerson(PersonRequestDto personRequestDto) {
-        return ResponseEntity.ok(personService.createPerson(personRequestDto));
+        return ResponseEntity.ok(personService.createPerson(personRequestDto).blockingGet());
     }
 
     @Override
     public ResponseEntity<PersonResponseDto> findAllPerson() {
-        return ResponseEntity.ok(personService.getAll());
+        return ResponseEntity.ok(personService.getAll().blockingFirst());
     }
 
     @Override
     public ResponseEntity<PersonResponseDto> findPersonById(String personId) {
-        return ResponseEntity.ok(personService.getPersonById(personId));
+        return ResponseEntity.ok(personService.getPersonById(personId).blockingGet());
     }
 
     @Override
     public ResponseEntity<PersonResponseDto> updatePerson(PersonRequestDto personRequestDto) {
-        return ResponseEntity.ok(personService.updatePerson(personRequestDto));
+        return ResponseEntity.ok(personService.updatePerson(personRequestDto).blockingGet());
     }
 }

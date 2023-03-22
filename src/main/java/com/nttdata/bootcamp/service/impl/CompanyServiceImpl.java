@@ -1,27 +1,35 @@
 package com.nttdata.bootcamp.service.impl;
 
+import com.nttdata.bootcamp.model.Company;
 import com.nttdata.bootcamp.model.CompanyRequestDto;
 import com.nttdata.bootcamp.model.CompanyResponseDto;
+import com.nttdata.bootcamp.repository.CompanyRepository;
 import com.nttdata.bootcamp.service.CompanyService;
 import com.nttdata.bootcamp.util.Util;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Maybe;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 /**
  * Clase de implementación para la interfaz CompanyService
  */
 @Service
+@AllArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
 
-	/*@Autowired
-    private CompanyRepository companyRepository;*/
+    private CompanyRepository companyRepository;
 
 	/**
 	 * Método que devuelve todos los clientes de tipo empresarial dentro el repositorio.
 	 * @return Flowable<CompanyResponseDto>
 	 */
 	@Override
-	public CompanyResponseDto getAll() {
-		return Util.getCompanyResponseDto();
+	public Flowable<CompanyResponseDto> getAll() {
+		return Flowable.just(companyRepository.findAll())
+				.map(Util::companyToResponse);
 	}
 
 	/**
@@ -29,8 +37,10 @@ public class CompanyServiceImpl implements CompanyService {
 	 * @return Maybe<CompanyResponseDto>
 	 */
 	@Override
-	public CompanyResponseDto getCompanyById(String companyId) {
-		return Util.getCompanyResponseDto(companyId);
+	public Maybe<CompanyResponseDto> getCompanyById(String companyId) {
+		return Flowable.just(companyRepository.findByCompanyId(companyId))
+				.map(Util::companyToResponse)
+				.firstElement();
 	}
 
 	/**
@@ -39,8 +49,18 @@ public class CompanyServiceImpl implements CompanyService {
 	 * @return Maybe<CompanyResponseDto>
 	 */
 	@Override
-	public CompanyResponseDto createCompany(CompanyRequestDto companyRequestDto) {
-		return Util.createCompanyResponseDto(companyRequestDto);
+	public Maybe<CompanyResponseDto> createCompany(CompanyRequestDto companyRequestDto) {
+		Company company=new Company();
+		company.setBusinessName(companyRequestDto.getBusinessName());
+		company.setRuc(companyRequestDto.getRuc());
+		company.setEmail(companyRequestDto.getEmail());
+		company.setTelephone(companyRequestDto.getTelephone());
+		company.setHolders(companyRequestDto.getHolders());
+		company.setSignatories(companyRequestDto.getSignatories());
+		return Flowable.just(companyRepository.save(company))
+				.collect(Collectors.toList())
+				.map(Util::companyToResponse)
+				.toMaybe();
 	}
 
 	/**
@@ -49,8 +69,19 @@ public class CompanyServiceImpl implements CompanyService {
 	 * @return Maybe<CompanyResponseDto>
 	 */
 	@Override
-	public CompanyResponseDto updateCompany(CompanyRequestDto companyRequestDto) {
-		return Util.createCompanyResponseDto(companyRequestDto);
+	public Maybe<CompanyResponseDto> updateCompany(CompanyRequestDto companyRequestDto) {
+		Company company=new Company();
+		company.setId(companyRequestDto.getId());
+		company.setBusinessName(companyRequestDto.getBusinessName());
+		company.setRuc(companyRequestDto.getRuc());
+		company.setEmail(companyRequestDto.getEmail());
+		company.setTelephone(companyRequestDto.getTelephone());
+		company.setHolders(companyRequestDto.getHolders());
+		company.setSignatories(companyRequestDto.getSignatories());
+		return Flowable.just(companyRepository.save(company))
+				.collect(Collectors.toList())
+				.map(Util::companyToResponse)
+				.toMaybe();
 	}
 
 }

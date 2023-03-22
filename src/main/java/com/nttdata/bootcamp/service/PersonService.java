@@ -10,12 +10,12 @@ import io.reactivex.rxjava3.core.Maybe;
  */
 public interface PersonService {
 
-    PersonResponseDto getAll();
+    Flowable<PersonResponseDto> getAll();
 
-    PersonResponseDto getPersonById(String personId);
+    Maybe<PersonResponseDto> getPersonById(String personId);
 
-    PersonResponseDto createPerson(PersonRequestDto personRequestDto);
+    Maybe<PersonResponseDto> createPerson(PersonRequestDto personRequestDto);
 
-    PersonResponseDto updatePerson(PersonRequestDto personRequestDto);
+    Maybe<PersonResponseDto> updatePerson(PersonRequestDto personRequestDto);
 
 }

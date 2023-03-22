@@ -3,34 +3,34 @@ package com.nttdata.bootcamp.delegate;
 import com.nttdata.bootcamp.api.CompanyApiDelegate;
 import com.nttdata.bootcamp.model.CompanyRequestDto;
 import com.nttdata.bootcamp.model.CompanyResponseDto;
+import com.nttdata.bootcamp.service.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
+@Service
 public class CompanyDelegateImpl implements CompanyApiDelegate {
-    @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return CompanyApiDelegate.super.getRequest();
-    }
+
+    @Autowired
+    private CompanyService companyService;
 
     @Override
     public ResponseEntity<CompanyResponseDto> createCompany(CompanyRequestDto companyRequestDto) {
-        return CompanyApiDelegate.super.createCompany(companyRequestDto);
+        return ResponseEntity.ok(companyService.createCompany(companyRequestDto).blockingGet());
     }
 
     @Override
     public ResponseEntity<CompanyResponseDto> findAllCompany() {
-        return CompanyApiDelegate.super.findAllCompany();
+        return ResponseEntity.ok(companyService.getAll().blockingFirst());
     }
 
     @Override
     public ResponseEntity<CompanyResponseDto> findCompanyById(String companyId) {
-        return CompanyApiDelegate.super.findCompanyById(companyId);
+        return ResponseEntity.ok(companyService.getCompanyById(companyId).blockingGet());
     }
 
     @Override
     public ResponseEntity<CompanyResponseDto> updateCompany(CompanyRequestDto companyRequestDto) {
-        return CompanyApiDelegate.super.updateCompany(companyRequestDto);
+        return ResponseEntity.ok(companyService.updateCompany(companyRequestDto).blockingGet());
     }
 }

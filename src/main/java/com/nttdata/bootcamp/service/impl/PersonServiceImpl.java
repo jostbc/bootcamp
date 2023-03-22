@@ -1,24 +1,34 @@
 package com.nttdata.bootcamp.service.impl;
 
+import com.nttdata.bootcamp.model.Person;
 import com.nttdata.bootcamp.model.PersonRequestDto;
 import com.nttdata.bootcamp.model.PersonResponseDto;
+import com.nttdata.bootcamp.repository.PersonRepository;
 import com.nttdata.bootcamp.service.PersonService;
 import com.nttdata.bootcamp.util.Util;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Maybe;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
 
 /**
- * Clase de implementación para la interfaz CompanyService
+ * Clase de implementación para la interfaz PersonService
  */
 @Service
+@AllArgsConstructor
 public class PersonServiceImpl implements PersonService {
+
+    private final PersonRepository personRepository;
 
     /**
      * Método que devuelve todos los clientes de tipo personal dentro el repositorio.
      * @return Flowable<PersonResponseDto>
      */
     @Override
-    public PersonResponseDto getAll() {
-        return Util.getPersonResponseDto();
+    public Flowable<PersonResponseDto> getAll() {
+        return Flowable.just(personRepository.findAll())
+                .map(Util::personToResponse);
     }
 
     /**
@@ -26,8 +36,10 @@ public class PersonServiceImpl implements PersonService {
      * @return Maybe<PersonResponseDto>
      */
     @Override
-    public PersonResponseDto getPersonById(String personId) {
-        return Util.getPersonResponseDto(personId);
+    public Maybe<PersonResponseDto> getPersonById(String personId) {
+        return Flowable.just(personRepository.findByPersonId(personId))
+                .map(Util::personToResponse)
+                .firstElement();
     }
 
     /**
@@ -36,8 +48,17 @@ public class PersonServiceImpl implements PersonService {
      * @return Maybe<PersonResponseDto>
      */
     @Override
-    public PersonResponseDto createPerson(PersonRequestDto personRequestDto) {
-        return Util.createPersonResponseDto(personRequestDto);
+    public Maybe<PersonResponseDto> createPerson(PersonRequestDto personRequestDto) {
+        Person person = new Person();
+        person.setName(personRequestDto.getName());
+        person.setLastName(personRequestDto.getLastName());
+        person.setDni(personRequestDto.getDni());
+        person.setEmail(personRequestDto.getEmail());
+        person.setTelephone(personRequestDto.getTelephone());
+        return Flowable.just(personRepository.save(person))
+                .collect(Collectors.toList())
+                .map(Util::personToResponse)
+                .toMaybe();
     }
 
     /**
@@ -46,8 +67,18 @@ public class PersonServiceImpl implements PersonService {
      * @return Maybe<PersonResponseDto>
      */
     @Override
-    public PersonResponseDto updatePerson(PersonRequestDto personRequestDto) {
-        return Util.createPersonResponseDto(personRequestDto);
+    public Maybe<PersonResponseDto> updatePerson(PersonRequestDto personRequestDto) {
+        Person person = new Person();
+        person.setId(personRequestDto.getId());
+        person.setName(personRequestDto.getName());
+        person.setLastName(personRequestDto.getLastName());
+        person.setDni(personRequestDto.getDni());
+        person.setEmail(personRequestDto.getEmail());
+        person.setTelephone(personRequestDto.getTelephone());
+        return Flowable.just(personRepository.save(person))
+                .collect(Collectors.toList())
+                .map(Util::personToResponse)
+                .toMaybe();
     }
 
 }
