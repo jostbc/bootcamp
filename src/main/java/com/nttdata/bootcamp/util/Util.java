@@ -5,6 +5,8 @@ import com.nttdata.bootcamp.model.CompanyResponseDto;
 import com.nttdata.bootcamp.model.MessageStatus;
 import com.nttdata.bootcamp.model.Person;
 import com.nttdata.bootcamp.model.PersonResponseDto;
+import com.nttdata.bootcamp.model.Transaction;
+import com.nttdata.bootcamp.model.TransactionResponseDto;
 
 import java.util.List;
 
@@ -44,5 +46,23 @@ public class Util {
             companyResponseDto.setCompany(company);
         }
         return companyResponseDto;
+    }
+
+    public static TransactionResponseDto transactionToResponse(List<Transaction> transaction){
+        TransactionResponseDto transactionResponseDto = new TransactionResponseDto();
+        MessageStatus msg = new MessageStatus();
+        if (transaction.size()>0){
+            msg.setStatusCode("0");
+            msg.setMessage("Operación exitosa.");
+            transactionResponseDto.setStatusDto(msg);
+            transactionResponseDto.setTransaction(transaction);
+        }
+        else{
+            msg.setStatusCode("1");
+            msg.setMessage("No existen transacciones.");
+            transactionResponseDto.setStatusDto(msg);
+            transactionResponseDto.setTransaction(transaction);
+        }
+        return transactionResponseDto;
     }
 }

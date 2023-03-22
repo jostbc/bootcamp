@@ -948,7 +948,6 @@ components:
           example: 500
         transactionDate:
           type: string
-          format: date
           example: 0017-09-13
     TransactionResponseDto:
       required:
@@ -993,7 +992,6 @@ components:
           example: 500
         transactionDate:
           type: string
-          format: date
           example: 0017-09-13
     Credit:
       required:
@@ -1038,11 +1036,9 @@ components:
           example: 500
         payDay:
           type: string
-          format: date
           example: 0017-09-13
         createDate:
           type: string
-          format: date
           example: 0017-09-13
     CreditResponseDto:
       required:
@@ -1098,11 +1094,9 @@ components:
           example: 500
         payDay:
           type: string
-          format: date
           example: 0017-09-13
         createDate:
           type: string
-          format: date
           example: 0017-09-13
     CreditCard:
       required:
@@ -1153,11 +1147,9 @@ components:
           example: 0
         payDay:
           type: string
-          format: date
           example: 0017-09-13
         createDate:
           type: string
-          format: date
           example: 0017-09-13
     CreditCardResponseDto:
       required:
@@ -1219,11 +1211,9 @@ components:
           example: 0
         payDay:
           type: string
-          format: date
           example: 0017-09-13
         createDate:
           type: string
-          format: date
           example: 0017-09-13
     Account:
       required:
@@ -1268,7 +1258,6 @@ components:
           example: 500
         createDate:
           type: string
-          format: date
           example: 0017-09-13
         status:
           type: integer
@@ -1327,7 +1316,6 @@ components:
           example: 500
         createDate:
           type: string
-          format: date
           example: 0017-09-13
         status:
           type: integer
