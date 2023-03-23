@@ -210,6 +210,12 @@ public class Util {
         account.setStatus(5);
         return account;
     }
+    public static Account accountNotWithdraw(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(2);
+        return account;
+    }
 
     public static AccountDepositResponseDto accountDepositToResponse(List<Account> account){
         AccountDepositResponseDto accountDepositResponseDto = new AccountDepositResponseDto();
@@ -232,7 +238,14 @@ public class Util {
         if (account.size()>0){
             msg.setStatusCode("0");
             msg.setMessage("Operación exitosa.");
+            switch (account.get(0).getStatus()){
+                case 2:
+                    msg.setStatusCode("2");
+                    msg.setMessage("La cuenta no tiene suficiente saldo.");
+                    break;
+            }
         }
+
         accountWithdrawResponseDto.setStatusDto(msg);
         return accountWithdrawResponseDto;
     }

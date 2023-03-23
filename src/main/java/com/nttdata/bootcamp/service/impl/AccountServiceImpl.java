@@ -224,7 +224,12 @@ public class AccountServiceImpl implements AccountService {
 					account.setComMaintenance(uAccount.get(0).getComMaintenance());
 					account.setMovementDate(uAccount.get(0).getMovementDate());
 					account.setMonthlyMovements(uAccount.get(0).getMonthlyMovements());
-					account.setAmount(uAccount.get(0).getAmount()-accountWithdrawRequestDto.getAmount());
+					if(uAccount.get(0).getAmount()>=accountWithdrawRequestDto.getAmount()){
+						account.setAmount(uAccount.get(0).getAmount()-accountWithdrawRequestDto.getAmount());
+					}
+					else{
+						return Maybe.just(Util.accountNotWithdraw());
+					}
 					account.setCreateDate(uAccount.get(0).getCreateDate());
 					account.setStatus(uAccount.get(0).getStatus());
 					return Maybe.just(accountRepository.save(account));
