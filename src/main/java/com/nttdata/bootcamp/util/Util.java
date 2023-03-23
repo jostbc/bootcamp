@@ -216,6 +216,12 @@ public class Util {
         account.setStatus(2);
         return account;
     }
+    public static Account customerNotAccount(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(3);
+        return account;
+    }
 
     public static AccountDepositResponseDto accountDepositToResponse(List<Account> account){
         AccountDepositResponseDto accountDepositResponseDto = new AccountDepositResponseDto();
@@ -242,6 +248,10 @@ public class Util {
                 case 2:
                     msg.setStatusCode("2");
                     msg.setMessage("La cuenta no tiene suficiente saldo.");
+                    break;
+                case 3:
+                    msg.setStatusCode("3");
+                    msg.setMessage("El cliente no es el titular de la cuenta.");
                     break;
             }
         }

@@ -218,6 +218,9 @@ public class AccountServiceImpl implements AccountService {
 				.flatMap(uAccount -> {
 					Account account = new Account();
 					account.setId(accountWithdrawRequestDto.getId());
+					if(!uAccount.get(0).getCustomerId().equals(accountWithdrawRequestDto.getCustomerId())){
+						return Maybe.just(Util.customerNotAccount());
+					}
 					account.setTypeAccount(uAccount.get(0).getTypeAccount());
 					account.setTypeCustomer(uAccount.get(0).getTypeCustomer());
 					account.setCustomerId(uAccount.get(0).getCustomerId());
