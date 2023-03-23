@@ -107,6 +107,9 @@ public class CreditCardServiceImpl implements CreditCardService {
 		return Maybe.just(creditCardRepository.findByCreditCardId(creditCardPayRequestDto.getId()))
 				.flatMap(uCreditCard -> {
 					CreditCard creditCard = new CreditCard();
+					if(!(uCreditCard.get(0).getSettlementAmount()>=creditCardPayRequestDto.getAmount())){
+						return Maybe.just(Util.creditCardNotPay());
+					}
 					creditCard.setId(creditCardPayRequestDto.getId());
 					creditCard.setCustomerId(creditCardPayRequestDto.getCustomerId());
 					creditCard.setCreditLine(uCreditCard.get(0).getCreditLine());
@@ -136,15 +139,23 @@ public class CreditCardServiceImpl implements CreditCardService {
 		return Maybe.just(creditCardRepository.findByCreditCardId(creditCardConsumeRequestDto.getId()))
 				.flatMap(uCreditCard -> {
 					CreditCard creditCard = new CreditCard();
+					if(!uCreditCard.get(0).getCustomerId().equals(creditCardConsumeRequestDto.getCustomerId())){
+						return Maybe.just(Util.customerNotCreditCard());
+					}
 					creditCard.setId(creditCardConsumeRequestDto.getId());
 					creditCard.setCustomerId(creditCardConsumeRequestDto.getCustomerId());
 					creditCard.setCreditLine(uCreditCard.get(0).getCreditLine());
 					creditCard.setCreditCardAccount(uCreditCard.get(0).getCreditCardAccount());
 					creditCard.setCreditCardId(uCreditCard.get(0).getCreditCardId());
-					creditCard.setLineAvailable(uCreditCard.get(0).getLineAvailable()-creditCardConsumeRequestDto.getAmount());
+					if (creditCard.getLineAvailable()>=creditCardConsumeRequestDto.getAmount()){
+						creditCard.setLineAvailable(uCreditCard.get(0).getLineAvailable()-creditCardConsumeRequestDto.getAmount());
+						creditCard.setSettlementAmount(uCreditCard.get(0).getSettlementAmount()+creditCardConsumeRequestDto.getAmount());
+					}
+					else{
+						return Maybe.just(Util.creditCardNotWithdraw());
+					}
 					creditCard.setFeeMonth(uCreditCard.get(0).getFeeMonth());
 					creditCard.setMinimumAmount(uCreditCard.get(0).getMinimumAmount());
-					creditCard.setSettlementAmount(uCreditCard.get(0).getSettlementAmount()+creditCardConsumeRequestDto.getAmount());
 					creditCard.setPayDay(uCreditCard.get(0).getPayDay());
 					creditCard.setCreateDate(uCreditCard.get(0).getCreateDate());
 					return Maybe.just(creditCardRepository.save(creditCard));

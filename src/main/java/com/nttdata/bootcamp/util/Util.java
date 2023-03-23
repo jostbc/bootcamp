@@ -80,15 +80,12 @@ public class Util {
     public static CreditCardResponseDto creditCardToResponse(List<CreditCard> creditCard){
         CreditCardResponseDto creditCardResponseDto = new CreditCardResponseDto();
         MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen tarjetas de credito.");
+        creditCardResponseDto.setCreditCard(null);
         if (creditCard.size()>0){
             msg.setStatusCode("0");
             msg.setMessage("Operación exitosa.");
-            creditCardResponseDto.setStatusDto(msg);
-            creditCardResponseDto.setCreditCard(creditCard);
-        }
-        else{
-            msg.setStatusCode("1");
-            msg.setMessage("No existen tarjetas de credito.");
             creditCardResponseDto.setStatusDto(msg);
             creditCardResponseDto.setCreditCard(creditCard);
         }
@@ -132,33 +129,54 @@ public class Util {
     public static CreditCardPayResponseDto creditCardPayToResponse(List<CreditCard> creditCard){
         CreditCardPayResponseDto creditCardPayResponseDto = new CreditCardPayResponseDto();
         MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen tarjetas de credito.");
         if (creditCard.size()>0){
             msg.setStatusCode("0");
             msg.setMessage("Operación exitosa.");
             creditCardPayResponseDto.setStatusDto(msg);
         }
-        else{
-            msg.setStatusCode("1");
-            msg.setMessage("No existen creditos.");
-            creditCardPayResponseDto.setStatusDto(msg);
+        if (creditCard.size()>0){
+            switch (creditCard.get(0).getId()){
+                case "2":
+                    msg.setStatusCode("2");
+                    msg.setMessage("El cliente no es el titular de la tarjeta de credito.");
+                    break;
+                case "3":
+                    msg.setStatusCode("3");
+                    msg.setMessage("La tarjeta de credito no tiene deuda pendiente o el monto excede la deuda pendiente.");
+                    break;
+            }
         }
+        creditCardPayResponseDto.setStatusDto(msg);
         return creditCardPayResponseDto;
     }
 
     public static CreditCardConsumeResponseDto creditCardConsumeToResponse(List<CreditCard> creditCard){
-        CreditCardConsumeResponseDto creditCardPayResponseDto = new CreditCardConsumeResponseDto();
+        CreditCardConsumeResponseDto creditCardConsumeResponseDto = new CreditCardConsumeResponseDto();
         MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen tarjetas de credito.");
         if (creditCard.size()>0){
             msg.setStatusCode("0");
             msg.setMessage("Operación exitosa.");
-            creditCardPayResponseDto.setStatusDto(msg);
+            creditCardConsumeResponseDto.setStatusDto(msg);
         }
-        else{
-            msg.setStatusCode("1");
-            msg.setMessage("No existen creditos.");
-            creditCardPayResponseDto.setStatusDto(msg);
+        if (creditCard.size()>0){
+            switch (creditCard.get(0).getId()){
+                case "2":
+                    msg.setStatusCode("2");
+                    msg.setMessage("El cliente no es el titular de la tarjeta de credito.");
+                    break;
+                case "3":
+                    msg.setStatusCode("3");
+                    msg.setMessage("La tarjeta de credito no tiene linea disponible.");
+                    break;
+
+            }
         }
-        return creditCardPayResponseDto;
+        creditCardConsumeResponseDto.setStatusDto(msg);
+        return creditCardConsumeResponseDto;
     }
     public static AccountResponseDto accountToResponse(List<Account> account){
         AccountResponseDto accountResponseDto = new AccountResponseDto();
@@ -221,6 +239,21 @@ public class Util {
         account.setId("0");
         account.setStatus(3);
         return account;
+    }
+    public static CreditCard customerNotCreditCard(){
+        CreditCard creditCard = new CreditCard();
+        creditCard.setId("2");
+        return creditCard;
+    }
+    public static CreditCard creditCardNotWithdraw(){
+        CreditCard creditCard = new CreditCard();
+        creditCard.setId("3");
+        return creditCard;
+    }
+    public static CreditCard creditCardNotPay(){
+        CreditCard creditCard = new CreditCard();
+        creditCard.setId("4");
+        return creditCard;
     }
 
     public static AccountDepositResponseDto accountDepositToResponse(List<Account> account){
