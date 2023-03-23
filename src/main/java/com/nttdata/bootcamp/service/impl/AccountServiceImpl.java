@@ -8,14 +8,16 @@ import com.nttdata.bootcamp.model.AccountResponseDto;
 import com.nttdata.bootcamp.model.AccountWithdrawRequestDto;
 import com.nttdata.bootcamp.model.AccountWithdrawResponseDto;
 import com.nttdata.bootcamp.repository.AccountRepository;
+import com.nttdata.bootcamp.repository.CompanyRepository;
+import com.nttdata.bootcamp.repository.PersonRepository;
 import com.nttdata.bootcamp.service.AccountService;
 import com.nttdata.bootcamp.util.Util;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.stream.Collectors;
 
 /**
  * Clase de implementación para la interfaz AccountService
@@ -26,6 +28,12 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
     private AccountRepository accountRepository;
+
+	@Autowired
+	private PersonRepository personRepository;
+
+	@Autowired
+	private CompanyRepository companyRepository;
 	
 	/**
 	 * Método que devuelve todas las cuentas dentro el repositorio.
@@ -85,11 +93,62 @@ public class AccountServiceImpl implements AccountService {
 		account.setAmount(accountRequestDto.getAmount());
 		account.setCreateDate(accountRequestDto.getCreateDate());
 		account.setStatus(accountRequestDto.getStatus());
-		return Flowable.just(accountRepository.save(account))
+		return Maybe.just(personRepository.findByPersonId(accountRequestDto.getCustomerId()))
+				.flatMap(a->{
+					if(a.isEmpty()){
+						return Maybe.empty();
+					}
+					return Maybe.just(accountRepository.findAccountByCustomerIdAndTypeAccount(a.stream().findFirst().get().getId()
+									,accountRequestDto.getTypeAccount()))
+							.flatMap(res ->{
+								if(res.isEmpty()){
+									return Maybe.just(Util.accountEmpty());
+								}
+								return Maybe.just(Util.accountExists());})
+							.flatMap(res->{
+								if(res.getStatus()==3){
+									return Maybe.just(Util.accountExists());
+								}
+									return Maybe.just(accountRepository.save(account));});
+				})
+				.defaultIfEmpty(Util.accountEmpty())
+				.toFlowable()
 				.collect(Collectors.toList())
 				.map(Util::accountToResponse)
 				.toMaybe();
+	}
 
+	/**
+	 * Crea una nueva cuenta dentro del repositorio con los datos enviados en el body.
+	 * @param accountRequestDto
+	 * @return Flowable<AccountResponseDto>
+	 */
+	@Override
+	public Maybe<AccountResponseDto> createAccountCompany(AccountRequestDto accountRequestDto){
+		Account account = new Account();
+		account.setTypeAccount(accountRequestDto.getTypeAccount());
+		account.setTypeCustomer(accountRequestDto.getTypeCustomer());
+		account.setCustomerId(accountRequestDto.getCustomerId());
+		account.setComMaintenance(accountRequestDto.getComMaintenance());
+		account.setMovementDate(accountRequestDto.getMovementDate());
+		account.setMonthlyMovements(accountRequestDto.getMonthlyMovements());
+		account.setAmount(accountRequestDto.getAmount());
+		account.setCreateDate(accountRequestDto.getCreateDate());
+		account.setStatus(accountRequestDto.getStatus());
+		return Maybe.just(companyRepository.findByCompanyId(accountRequestDto.getCustomerId()))
+				.flatMap(c->{
+					if(c.isEmpty()){
+						return Maybe.empty();
+					}
+					if(accountRequestDto.getTypeAccount().equals("CUENTA_CORRIENTE")){
+						return Maybe.just(accountRepository.save(account));
+					}
+					return Maybe.just(Util.typeNotCompany());
+				}).defaultIfEmpty(Util.accountEmpty())
+				.toFlowable()
+				.collect(Collectors.toList())
+				.map(Util::accountToResponse)
+				.toMaybe();
 	}
 
 	/**

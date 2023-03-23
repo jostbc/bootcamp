@@ -181,10 +181,34 @@ public class Util {
                     msg.setStatusCode("4");
                     msg.setMessage("No existe el cliente.");
                     break;
+                case 5:
+                    msg.setStatusCode("5");
+                    msg.setMessage("El cliente solo puede tener cuentas corrientes.");
+                    break;
             }
         }
         accountResponseDto.setStatusDto(msg);
         return accountResponseDto;
+    }
+
+    public static Account accountExists(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(3);
+        return account;
+    }
+
+    public static Account accountEmpty(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(4);
+        return account;
+    }
+    public static Account typeNotCompany(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(5);
+        return account;
     }
 
     public static AccountDepositResponseDto accountDepositToResponse(List<Account> account){
