@@ -7,21 +7,27 @@ import com.nttdata.bootcamp.model.CreditCardPayRequestDto;
 import com.nttdata.bootcamp.model.CreditCardPayResponseDto;
 import com.nttdata.bootcamp.model.CreditCardRequestDto;
 import com.nttdata.bootcamp.model.CreditCardResponseDto;
+import com.nttdata.bootcamp.model.Transaction;
 import com.nttdata.bootcamp.repository.CreditCardRepository;
+import com.nttdata.bootcamp.repository.TransactionRepository;
 import com.nttdata.bootcamp.service.CreditCardService;
 import com.nttdata.bootcamp.util.Util;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
 
 @Service
 public class CreditCardServiceImpl implements CreditCardService {
 
 	@Autowired
     private CreditCardRepository creditCardRepository;
+
+	@Autowired
+	private TransactionRepository transactionRepository;
 
 	/**
 	 * Método que devuelve todas las tarjetas de credito dentro el repositorio.
@@ -121,6 +127,14 @@ public class CreditCardServiceImpl implements CreditCardService {
 					creditCard.setSettlementAmount(uCreditCard.get(0).getSettlementAmount()-creditCardPayRequestDto.getAmount());
 					creditCard.setPayDay(uCreditCard.get(0).getPayDay());
 					creditCard.setCreateDate(uCreditCard.get(0).getCreateDate());
+					Transaction transaction = new Transaction();
+					transaction.setProductType("TARJETA");
+					transaction.setProductId(creditCardPayRequestDto.getId());
+					transaction.setCustomerId(creditCardPayRequestDto.getCustomerId());
+					transaction.setTransactionType("PAGO");
+					transaction.setAmount(creditCardPayRequestDto.getAmount());
+					transaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					transactionRepository.save(transaction);
 					return Maybe.just(creditCardRepository.save(creditCard));
 				})
 				.toFlowable()
@@ -147,7 +161,7 @@ public class CreditCardServiceImpl implements CreditCardService {
 					creditCard.setCreditLine(uCreditCard.get(0).getCreditLine());
 					creditCard.setCreditCardAccount(uCreditCard.get(0).getCreditCardAccount());
 					creditCard.setCreditCardId(uCreditCard.get(0).getCreditCardId());
-					if (creditCard.getLineAvailable()>=creditCardConsumeRequestDto.getAmount()){
+					if (uCreditCard.get(0).getLineAvailable()>=creditCardConsumeRequestDto.getAmount()){
 						creditCard.setLineAvailable(uCreditCard.get(0).getLineAvailable()-creditCardConsumeRequestDto.getAmount());
 						creditCard.setSettlementAmount(uCreditCard.get(0).getSettlementAmount()+creditCardConsumeRequestDto.getAmount());
 					}
@@ -158,6 +172,14 @@ public class CreditCardServiceImpl implements CreditCardService {
 					creditCard.setMinimumAmount(uCreditCard.get(0).getMinimumAmount());
 					creditCard.setPayDay(uCreditCard.get(0).getPayDay());
 					creditCard.setCreateDate(uCreditCard.get(0).getCreateDate());
+					Transaction transaction = new Transaction();
+					transaction.setProductType("TARJETA");
+					transaction.setProductId(creditCardConsumeRequestDto.getId());
+					transaction.setCustomerId(creditCardConsumeRequestDto.getCustomerId());
+					transaction.setTransactionType("CONSUMO");
+					transaction.setAmount(creditCardConsumeRequestDto.getAmount());
+					transaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					transactionRepository.save(transaction);
 					return Maybe.just(creditCardRepository.save(creditCard));
 				})
 				.toFlowable()

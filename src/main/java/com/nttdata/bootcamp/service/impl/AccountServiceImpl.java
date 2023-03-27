@@ -7,13 +7,18 @@ import com.nttdata.bootcamp.model.AccountRequestDto;
 import com.nttdata.bootcamp.model.AccountResponseDto;
 import com.nttdata.bootcamp.model.AccountWithdrawRequestDto;
 import com.nttdata.bootcamp.model.AccountWithdrawResponseDto;
+import com.nttdata.bootcamp.model.Transaction;
 import com.nttdata.bootcamp.repository.AccountRepository;
 import com.nttdata.bootcamp.repository.CompanyRepository;
 import com.nttdata.bootcamp.repository.PersonRepository;
+import com.nttdata.bootcamp.repository.TransactionRepository;
 import com.nttdata.bootcamp.service.AccountService;
 import com.nttdata.bootcamp.util.Util;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +39,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	private CompanyRepository companyRepository;
+
+	@Autowired
+	private TransactionRepository transactionRepository;
 	
 	/**
 	 * Método que devuelve todas las cuentas dentro el repositorio.
@@ -199,6 +207,14 @@ public class AccountServiceImpl implements AccountService {
 					account.setAmount(uAccount.get(0).getAmount()+accountDepositRequestDto.getAmount());
 					account.setCreateDate(uAccount.get(0).getCreateDate());
 					account.setStatus(uAccount.get(0).getStatus());
+					Transaction transaction = new Transaction();
+					transaction.setProductType(accountDepositRequestDto.getTypeAccount());
+					transaction.setProductId(accountDepositRequestDto.getId());
+					transaction.setCustomerId(accountDepositRequestDto.getCustomerId());
+					transaction.setTransactionType("DEPOSITO");
+					transaction.setAmount(accountDepositRequestDto.getAmount());
+					transaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					transactionRepository.save(transaction);
 					return Maybe.just(accountRepository.save(account));
 				})
 				.toFlowable()
@@ -235,6 +251,14 @@ public class AccountServiceImpl implements AccountService {
 					}
 					account.setCreateDate(uAccount.get(0).getCreateDate());
 					account.setStatus(uAccount.get(0).getStatus());
+					Transaction transaction = new Transaction();
+					transaction.setProductType(accountWithdrawRequestDto.getTypeAccount());
+					transaction.setProductId(accountWithdrawRequestDto.getId());
+					transaction.setCustomerId(accountWithdrawRequestDto.getCustomerId());
+					transaction.setTransactionType("RETIRO");
+					transaction.setAmount(accountWithdrawRequestDto.getAmount());
+					transaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					transactionRepository.save(transaction);
 					return Maybe.just(accountRepository.save(account));
 				})
 				.toFlowable()
