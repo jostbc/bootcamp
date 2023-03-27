@@ -165,4 +165,14 @@ public class CreditCardServiceImpl implements CreditCardService {
 				.map(Util::creditCardConsumeToResponse)
 				.toMaybe();
 	}
+
+	/**
+	 * Devuelve todas las tarjetas de credito dentro el repositorio segun el id del cliente.
+	 * @return Maybe<CreditCardResponseDto>
+	 */
+	@Override
+	public Maybe<CreditCardResponseDto> getCreditCardByCustomerId(String customerId) {
+		return Maybe.just(creditCardRepository.findCreditCardByCustomerId(customerId))
+				.map(Util::creditCardToResponse);
+	}
 }
